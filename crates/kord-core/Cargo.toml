@@ -1,0 +1,13 @@
+[package]
+name = "kord-core"
+description = "Platform-independent protocol decoding and state logic for Kord"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+rust-version.workspace = true
+
+# Intentionally dependency-free: everything here is pure logic that is easy to test
+# and easy to reuse from other front-ends.
+[dependencies]

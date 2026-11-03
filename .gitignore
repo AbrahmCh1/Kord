@@ -1,0 +1,8 @@
+/target
+**/*.rs.bk
+*.pdb
+.idea/
+.vscode/
+
+# 3D sources of the device sprites (67 MB); tools/download_selected.ps1 fetches them.
+/assets/model/**/*.glb

@@ -1,0 +1,60 @@
+[package]
+name = "kord"
+description = "Lightweight AirPods (and wireless headphones) companion for Windows and Linux"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+authors.workspace = true
+rust-version.workspace = true
+
+[dependencies]
+kord-core.workspace = true
+ab_glyph = "0.2"
+anyhow = "1"
+btleplug = "0.13"
+clap = { version = "4", features = ["derive"] }
+directories = "6"
+futures = "0.3"
+notify-rust = "4"
+serde = { version = "1", features = ["derive"] }
+softbuffer = "0.4"
+sys-locale = "0.3"
+tao = "0.37"
+tiny-skia = "0.12"
+tokio = { version = "1", features = ["rt", "macros", "sync", "time"] }
+toml = "1"
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+tray-icon = "0.26"
+
+[build-dependencies]
+embed-resource = "3"
+
+[target.'cfg(windows)'.dependencies]
+# Needed by the `#[interface]` macro used to declare an undocumented COM interface.
+windows-core = "0.62"
+windows = { version = "0.62", features = [
+    "Devices_Bluetooth",
+    "Win32_Devices_Bluetooth",
+    "Win32_System_Threading",
+    "Win32_UI_Shell",
+    "Foundation",
+    "Foundation_Collections",
+    "Media_Control",
+    "Win32_Foundation",
+    "Win32_Graphics_Dwm",
+    "Win32_Media_Audio",
+    "Win32_Media_Audio_Endpoints",
+    "Win32_Security",
+    "Win32_System_Registry",
+    "Win32_Media_KernelStreaming",
+    "Win32_System_Com",
+    "Win32_System_Com_StructuredStorage",
+    "Win32_System_Console",
+    "Win32_System_Variant",
+    "Win32_UI_WindowsAndMessaging",
+] }
+
+[target.'cfg(target_os = "linux")'.dependencies]
+zbus = "5"

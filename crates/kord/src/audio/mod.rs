@@ -16,6 +16,8 @@ pub use self::unsupported::*;
 
 /// Progress of a microphone test.
 #[derive(Debug, Clone, PartialEq)]
+// Platforms without the test only ever report `Failed`.
+#[cfg_attr(not(windows), allow(dead_code))]
 pub enum Phase {
     Recording { seconds_left: u32 },
     Playing,

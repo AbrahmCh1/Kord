@@ -16,7 +16,7 @@ pub type Handle = String;
 const DEVICE_INTERFACE: &str = "org.bluez.Device1";
 
 /// Properties of every paired BlueZ device, by object path.
-fn paired_devices(conn: &Connection) -> Result<Vec<(String, HashMap<String, OwnedValue>)>> {
+fn paired_objects(conn: &Connection) -> Result<Vec<(String, HashMap<String, OwnedValue>)>> {
     let objects = ObjectManagerProxy::builder(conn).destination("org.bluez")?.path("/")?.build()?.get_managed_objects()?;
     Ok(objects
         .into_iter()
@@ -34,7 +34,7 @@ fn device_ids(props: &HashMap<String, OwnedValue>) -> Option<(u16, u16)> {
 
 pub fn find(vendor_id: u16, product_id: u16) -> Result<Link> {
     let conn = Connection::system().context("D-Bus system bus")?;
-    for (path, props) in paired_devices(&conn)? {
+    for (path, props) in paired_objects(&conn)? {
         if device_ids(&props) == Some((vendor_id, product_id)) {
             return Ok(Link::Paired(paired_device(path, &props)));
         }
@@ -44,7 +44,7 @@ pub fn find(vendor_id: u16, product_id: u16) -> Result<Link> {
 
 pub fn paired_devices() -> Result<Vec<KnownDevice>> {
     let conn = Connection::system().context("D-Bus system bus")?;
-    Ok(paired_devices(&conn)?
+    Ok(paired_objects(&conn)?
         .into_iter()
         .filter(|(_, props)| {
             // Only audio devices: BlueZ icons are "audio-headphones", "audio-headset"…
@@ -67,7 +67,7 @@ fn paired_device(path: String, props: &HashMap<String, OwnedValue>) -> PairedDev
 
 pub fn paired_ids() -> Result<Vec<(u16, u16)>> {
     let conn = Connection::system().context("D-Bus system bus")?;
-    Ok(paired_devices(&conn)?.iter().filter_map(|(_, props)| device_ids(props)).collect())
+    Ok(paired_objects(&conn)?.iter().filter_map(|(_, props)| device_ids(props)).collect())
 }
 
 pub fn connect(device: &PairedDevice) -> Result<()> {
